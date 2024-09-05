@@ -36,7 +36,7 @@ def create_app(config):
             return render_template('welcome.html', club=club,
                                    competitions=competitions)
         except IndexError:
-            message = "Sorry, that email wasn't found."
+            message = "Sorry, that email was not found."
             return render_template('index.html', message=message)
 
     @app.route('/book/<competition>/<club>')

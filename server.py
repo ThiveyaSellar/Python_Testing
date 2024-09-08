@@ -60,10 +60,13 @@ def create_app(config):
         club = [c for c in clubs if c['name'] == request.form['club']][0]
         placesRequired = int(request.form['places'])
         # Vérifier qu'il y a assez de places pour la compétition et assez de place
-        if placesRequired < int(club["points"]):
+        if placesRequired <= int(club["points"]):
             if int(competition['numberOfPlaces']) - placesRequired >= 0:
+                # Maj du nombre de places disponibles pour la compétition
                 competition['numberOfPlaces'] = int(
                     competition['numberOfPlaces']) - placesRequired
+                # Maj du nombre de points pour le club
+                club['points'] = int(club["points"]) - placesRequired
                 flash('Great-booking complete!')
                 return render_template('welcome.html', club=club,
                                        competitions=competitions)

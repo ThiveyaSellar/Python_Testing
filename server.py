@@ -54,30 +54,34 @@ def create_app(config):
 
     @app.route('/purchasePlaces', methods=['POST'])
     def purchasePlaces():
+        # Chercher les données de la compétition sélectionnée
         competition = \
         [c for c in competitions if c['name'] == request.form['competition']][
             0]
+        # Chercher les données du club de la secrétaire identifiée
         club = [c for c in clubs if c['name'] == request.form['club']][0]
+        # Récupérer le nombre de places sélectionné pour la réservation
         placesRequired = int(request.form['places'])
-        # Vérifier qu'il y a assez de places pour la compétition et assez de place
-        if placesRequired <= int(club["points"]):
-            if int(competition['numberOfPlaces']) - placesRequired >= 0:
-                # Maj du nombre de places disponibles pour la compétition
-                competition['numberOfPlaces'] = int(
-                    competition['numberOfPlaces']) - placesRequired
-                # Maj du nombre de points pour le club
-                club['points'] = int(club["points"]) - placesRequired
-                flash('Great-booking complete!')
-                return render_template('welcome.html', club=club,
-                                       competitions=competitions)
-            else:
-                flash('Not enough places!')
-                return render_template('welcome.html', club=club,
-                                       competitions=competitions)
-        else:
+        # Vérifier que le club a assez de points
+        if not placesRequired <= int(club["points"]):
             flash('Not enough points!')
             return render_template('welcome.html', club=club,
                                    competitions=competitions)
+
+        # Vérifier qu'il reste assez de places pour la compétition
+        if not int(competition['numberOfPlaces']) - placesRequired >= 0:
+            flash('Not enough places!')
+            return render_template('welcome.html', club=club,
+                                   competitions=competitions)
+
+        # Maj du nombre de places disponibles pour la compétition
+        competition['numberOfPlaces'] = int(
+            competition['numberOfPlaces']) - placesRequired
+        # Maj du nombre de points pour le club
+        club['points'] = int(club["points"]) - placesRequired
+        flash('Great-booking complete!')
+        return render_template('welcome.html', club=club,
+                               competitions=competitions)
 
     # TODO: Add route for points display
 

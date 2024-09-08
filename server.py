@@ -94,7 +94,8 @@ def create_app(config):
         # Maj du nombre de places disponibles pour la compétition
         competition['numberOfPlaces'] = int(
             competition['numberOfPlaces']) - placesRequired
-
+        # Maj du nombre de points pour le club
+        club['points'] = int(club["points"]) - placesRequired
         flash('Great-booking complete!')
         return render_template('welcome.html', club=club,
                                competitions=competitions)

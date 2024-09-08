@@ -13,6 +13,18 @@ def loadCompetitions():
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
 
+def check_booking_conditions(club, competition, placesRequired):
+    # Vérifier que le club a assez de points
+    if placesRequired > 12 or placesRequired <= 0:
+        flash("Booking number should be between 1 and 12!")
+    # Vérifier qu'il reste assez de places pour la compétition
+    elif not int(competition['numberOfPlaces']) - placesRequired >= 0:
+        flash('Not enough places!')
+    elif not placesRequired <= int(club["points"]):
+        flash('Not enough points!')
+    else:
+        return True
+    return False
 
 """app = Flask(__name__)
 app.secret_key = 'something_special'"""
@@ -61,7 +73,7 @@ def create_app(config):
                 0]
         except IndexError:
             print("-------- Index Error --------")
-            print("request.form['competition'] = ", request.form['competition'])
+            print("request.form['competition'] =", request.form['competition'])
         # Chercher les données du club de la secrétaire identifiée
         try:
             club = [c for c in clubs if c['name'] == request.form['club']][0]
@@ -70,16 +82,15 @@ def create_app(config):
             print("request.form['club'] = ",request.form['club'])
         # Récupérer le nombre de places sélectionné pour la réservation
         placesRequired = int(request.form['places'])
-        # Vérifier que le club a assez de points
-        if not placesRequired <= int(club["points"]):
-            flash('Not enough points!')
+
+        # Vérifier les conditions de réservation
+        if not check_booking_conditions(
+            club,
+            competition,
+            placesRequired
+        ):
             return render_template('welcome.html', club=club,
-                                   competitions=competitions)
-        # Vérifier qu'il reste assez de places pour la compétition
-        if not int(competition['numberOfPlaces']) - placesRequired >= 0:
-            flash('Not enough places!')
-            return render_template('welcome.html', club=club,
-                                   competitions=competitions)
+                               competitions=competitions)
         # Maj du nombre de places disponibles pour la compétition
         competition['numberOfPlaces'] = int(
             competition['numberOfPlaces']) - placesRequired

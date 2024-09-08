@@ -55,11 +55,19 @@ def create_app(config):
     @app.route('/purchasePlaces', methods=['POST'])
     def purchasePlaces():
         # Chercher les données de la compétition sélectionnée
-        competition = \
-        [c for c in competitions if c['name'] == request.form['competition']][
-            0]
+        try:
+            competition = \
+            [c for c in competitions if c['name'] == request.form['competition']][
+                0]
+        except IndexError:
+            print("-------- Index Error --------")
+            print("request.form['competition'] = ", request.form['competition'])
         # Chercher les données du club de la secrétaire identifiée
-        club = [c for c in clubs if c['name'] == request.form['club']][0]
+        try:
+            club = [c for c in clubs if c['name'] == request.form['club']][0]
+        except IndexError:
+            print("-------- Index Error --------")
+            print("request.form['club'] = ",request.form['club'])
         # Récupérer le nombre de places sélectionné pour la réservation
         placesRequired = int(request.form['places'])
         # Vérifier que le club a assez de points
@@ -67,13 +75,11 @@ def create_app(config):
             flash('Not enough points!')
             return render_template('welcome.html', club=club,
                                    competitions=competitions)
-
         # Vérifier qu'il reste assez de places pour la compétition
         if not int(competition['numberOfPlaces']) - placesRequired >= 0:
             flash('Not enough places!')
             return render_template('welcome.html', club=club,
                                    competitions=competitions)
-
         # Maj du nombre de places disponibles pour la compétition
         competition['numberOfPlaces'] = int(
             competition['numberOfPlaces']) - placesRequired

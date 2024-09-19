@@ -1,10 +1,5 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking for {{competition['name']}} || GUDLFT</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
     <h2>{{competition['name']}}</h2>
     Places available: {{competition['numberOfPlaces']}}
     <form action="/purchasePlaces" method="post">
@@ -13,5 +8,4 @@
         <label for="places">How many places?</label><input type="number" name="places" id="places"/>
         <button type="submit">Book</button>
     </form>
-</body>
-</html>
+{% endblock %}

@@ -1,51 +1,40 @@
-# gudlift-registration
+# GÜDLFT Application de réservation pour les compétitions de force
 
-1. Why
+Application de réservation de compétions de force pour les clubs régionaux réalisée avec le micro-framework flask.
 
+## Installation
 
-    This is a proof of concept (POC) project to show a light-weight version of our competition booking platform. The aim is the keep things as light as possible, and use feedback from the users to iterate.
+Cloner le dépôt : ```git clone https://github.com/ThiveyaSellar/Python_Testing.git```
 
-2. Getting Started
+Créer un environnement virtuel python : ```python -m venv env```
 
-    This project uses the following technologies:
+ Activer l'environnement virtuel :
+- Windows :
+```venv\Scripts\activate```
+- Linux :
+```source venv/bin/activate```
 
-    * Python v3.x+
+Installer les paquets du fichier requirements.txt : ```pip install -r requirements.txt```
 
-    * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+Indiquer à Flask quelle application exécuter
+```set FLASK_APP=server.py```
 
-        Whereas Django does a lot of things for us out of the box, Flask allows us to add only what we need. 
-     
+Démarrer le serveur 
+```flask run```
 
-    * [Virtual environment](https://virtualenv.pypa.io/en/stable/installation.html)
+## Tests
 
-        This ensures you'll be able to install the correct packages without interfering with Python on your machine.
+A la racine du projet : ``pytest``
 
-        Before you begin, please ensure you have this installed globally. 
+Pour un test en particulier : ``pytest <fichier de test>``
 
+Avec les prints : ``pytest -s <fichier_de_test>``
 
-3. Installation
+- Pour les tests fonctionnels et de performance, il faut s'assurer d'avoir un pilote chromedriver qui soit compatible avec la version du navigateur et lancer le serveur flask dans un terminal puis lancer les tests dans un autre terminal
 
-    - After cloning, change into the directory and type <code>virtualenv .</code>. This will then set up a a virtual python environment within that directory.
+Tester la couverture :
 
-    - Next, type <code>source bin/activate</code>. You should see that your command prompt has changed to the name of the folder. This means that you can install packages in here without affecting affecting files outside. To deactivate, type <code>deactivate</code>
+Se placer à la racine du projet :  ```pytest --cov=répertoire_du_code_source```
 
-    - Rather than hunting around for the packages you need, you can install in one step. Type <code>pip install -r requirements.txt</code>. This will install all the packages listed in the respective file. If you install a package, make sure others know by updating the requirements.txt file. An easy way to do this is <code>pip freeze > requirements.txt</code>
-
-    - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
-
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
-
-4. Current Setup
-
-    The app is powered by [JSON files](https://www.tutorialspoint.com/json/json_quick_guide.htm). This is to get around having a DB until we actually need one. The main ones are:
-     
-    * competitions.json - list of competitions
-    * clubs.json - list of clubs with relevant information. You can look here to see what email addresses the app will accept for login.
-
-5. Testing
-
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
-
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
-
+Générer un rapport html de la couverture : ```pytest --cov=. --cov-report html```
+```
